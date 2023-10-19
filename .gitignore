@@ -1,11 +1,13 @@
 .DS_Store
 node_modules
 /dist
+.session.vim
 
 
 # local env files
 .env.local
 .env.*.local
+.session.vim
 
 # Log files
 npm-debug.log*
@@ -21,3 +23,5 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+sys.key
