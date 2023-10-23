@@ -16,8 +16,12 @@
 </template>
 
 <script>
-import Vue from "vue/dist/vue.common";
-import { sfc2Component, loadSfc, loadComponent, loadJS } from "./sfc-utils";
+import {
+  sfc2Component,
+  module2Component,
+  loadSfc,
+  loadComponent,
+} from "./sfc-utils";
 
 export default {
   name: "App",
@@ -25,7 +29,6 @@ export default {
   data() {
     return {
       remote: null,
-      // TODO
       code: ``,
       isSFCSource: true,
       cmOptions: {},
@@ -43,10 +46,8 @@ export default {
         this.remote = comp;
         return;
       }
-      const dataUrl = `data:text/javascript;charset=utf-8;base64,${btoa(v)}`;
-      const [_, c] = await loadComponent(dataUrl);
-      comp = c;
-      this.remote = comp.default;
+      console.log("module to component");
+      this.remote = await module2Component(v);
     },
     async readRemoteSfc() {
       this.code = "";

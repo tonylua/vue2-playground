@@ -65,3 +65,11 @@ export const loadComponent = (url) =>
     fetch(url).then((res) => res.text()),
     window.System.import(url),
   ]);
+
+export const module2Component = async (moduleContent) => {
+  const dataUrl = `data:text/javascript;charset=utf-8;base64,${btoa(
+    moduleContent
+  )}`;
+  const [_, res] = await loadComponent(dataUrl);
+  return res.default || res;
+};
