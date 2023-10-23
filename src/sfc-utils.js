@@ -1,11 +1,12 @@
 import Vue from "vue/dist/vue.common";
 import { loadModule } from "vue3-sfc-loader/dist/vue2-sfc-loader";
 
-const _loadJS = (url) => {
+const _loadJS = (url, onload) => {
   const s = document.createElement("script");
   s.type = "text/javascript";
   s.src = url;
   s.defer = "defer";
+  if (typeof onload === "function") s.onload = onload;
   document.head.appendChild(s);
 };
 _loadJS("/@systemjs/system.min.js");
@@ -59,7 +60,8 @@ export const loadSfc = (url) =>
     }),
   ]);
 
-export const loadComponent = (url) => {
-  // window.System.constructor.prototype.shouldFetch = () => false;
-  return window.System.import(url);
-};
+export const loadComponent = (url) =>
+  Promise.all([
+    fetch(url).then((res) => res.text()),
+    window.System.import(url),
+  ]);

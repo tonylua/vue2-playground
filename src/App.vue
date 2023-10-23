@@ -6,6 +6,7 @@
       <codemirror
         v-model="code"
         :options="cmOptions"
+        :mode="isSFCSource ? 'text/x-vue' : 'text/javascript'"
         @ready="onCmReady"
         @input="onCmChange"
       />
@@ -15,7 +16,8 @@
 </template>
 
 <script>
-import { sfc2Component, loadSfc, loadComponent } from "./sfc-utils";
+import Vue from "vue/dist/vue.common";
+import { sfc2Component, loadSfc, loadComponent, loadJS } from "./sfc-utils";
 
 export default {
   name: "App",
@@ -25,6 +27,7 @@ export default {
       remote: null,
       // TODO
       code: ``,
+      isSFCSource: true,
       cmOptions: {},
     };
   },
@@ -33,29 +36,41 @@ export default {
       cm.setSize(600, 360);
     },
     async onCmChange(v) {
-      const comp = await sfc2Component(v);
-      this.remote = comp;
-      console.log("sfc to component");
+      let comp = null;
+      if (this.isSFCSource) {
+        comp = await sfc2Component(v);
+        console.log("sfc to component");
+        this.remote = comp;
+        return;
+      }
+      const dataUrl = `data:text/javascript;charset=utf-8;base64,${btoa(v)}`;
+      const [_, c] = await loadComponent(dataUrl);
+      comp = c;
+      this.remote = comp.default;
     },
     async readRemoteSfc() {
       this.code = "";
+      this.isSFCSource = false;
       const [code, comp] = await loadSfc(
         "/vue-sample/src/components/HelloRemote.vue"
       );
       console.log(comp, "remote sfc loaded");
+      this.isSFCSource = true;
       this.code = code;
       // this.remote = comp;
     },
     async loadRemoteComp() {
       this.code = "";
-      const comp = await loadComponent(
+      this.isSFCSource = false;
+      const [code, comp] = await loadComponent(
         "http://localhost:8080/vue-sample/dist/comp.umd.min.js"
       );
       console.log(comp, "systemjs component loaded");
-      this.remote = comp.default;
+      this.code = code;
+      // this.remote = comp.default;
     },
   },
-  async mounted() {},
+  mounted() {},
 };
 </script>
 
