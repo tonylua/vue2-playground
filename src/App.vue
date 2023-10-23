@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <button @click="loadRemoteSfc">load remote sfc</button>
+    <button @click="readRemoteSfc">read sfc</button>
+    <button @click="loadRemoteComp">systemjs load</button>
     <div class="code-box">
       <codemirror
         v-model="code"
@@ -14,7 +15,7 @@
 </template>
 
 <script>
-import { sfc2Component, loadSfc } from "./sfc-utils";
+import { sfc2Component, loadSfc, loadComponent } from "./sfc-utils";
 
 export default {
   name: "App",
@@ -36,13 +37,22 @@ export default {
       this.remote = comp;
       console.log("sfc to component");
     },
-    async loadRemoteSfc() {
+    async readRemoteSfc() {
+      this.code = "";
       const [code, comp] = await loadSfc(
-        "vue-sample/src/components/HelloRemote.vue"
+        "/vue-sample/src/components/HelloRemote.vue"
       );
       console.log(comp, "remote sfc loaded");
       this.code = code;
       // this.remote = comp;
+    },
+    async loadRemoteComp() {
+      this.code = "";
+      const comp = await loadComponent(
+        "http://localhost:8080/vue-sample/dist/comp.umd.min.js"
+      );
+      console.log(comp, "systemjs component loaded");
+      this.remote = comp.default;
     },
   },
   async mounted() {},
@@ -63,5 +73,8 @@ export default {
   display: flex;
   flex-direction: row;
   gap: 20px;
+}
+button + button {
+  margin-left: 10px;
 }
 </style>

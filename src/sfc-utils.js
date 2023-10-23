@@ -1,8 +1,19 @@
 import Vue from "vue/dist/vue.common";
-import {
-  loadModule,
-  createSFCModule,
-} from "vue3-sfc-loader/dist/vue2-sfc-loader";
+import { loadModule } from "vue3-sfc-loader/dist/vue2-sfc-loader";
+
+const _loadJS = (url) => {
+  const s = document.createElement("script");
+  s.type = "text/javascript";
+  s.src = url;
+  s.defer = "defer";
+  document.head.appendChild(s);
+};
+_loadJS("/@systemjs/system.min.js");
+_loadJS("/@systemjs/extras/amd.min.js");
+_loadJS("/@systemjs/extras/global.min.js");
+_loadJS("/@systemjs/extras/module-types.min.js");
+_loadJS("/@systemjs/extras/named-register.min.js");
+_loadJS("/@systemjs/extras/use-default.min.js");
 
 // https://github.com/FranckFreiburger/vue3-sfc-loader/blob/main/docs/api/README.md#loadmodule
 // https://stackoverflow.com/questions/73889234/vue3-how-to-parse-sfc-string-to-a-component
@@ -47,3 +58,8 @@ export const loadSfc = (url) =>
       },
     }),
   ]);
+
+export const loadComponent = (url) => {
+  // window.System.constructor.prototype.shouldFetch = () => false;
+  return window.System.import(url);
+};
