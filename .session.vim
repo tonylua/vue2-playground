@@ -13,21 +13,49 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +1 package.json
-badd +81 src/app.css
-badd +103 src/App.vue
-badd +1 jsconfig.json
-badd +10 src/main.js
-badd +4 src/sfc-utils.js
-badd +29 public/vue-sample/src/components/HelloRemote.vue
-badd +22 public/vue-sample/package.json
-badd +0 public/vue-sample/src/index.js
-badd +5 .gitignore
+badd +0 public/vue-sample/src/components/HelloRemote.vue
+badd +105 term://~/my_git/vue-source-editor-sample//37172:bash
+badd +7 term://~/my_git/vue-source-editor-sample//37192:bash
+badd +5 term://~/my_git/vue-source-editor-sample//37198:bash
+badd +11 package.json
+badd +0 public/vue-sample/package.json
 argglobal
 %argdel
-edit public/vue-sample/src/components/HelloRemote.vue
+$argadd public/vue-sample
+edit public/vue-sample/package.json
+let s:save_splitbelow = &splitbelow
+let s:save_splitright = &splitright
+set splitbelow splitright
+wincmd _ | wincmd |
+vsplit
+1wincmd h
+wincmd w
+let &splitbelow = s:save_splitbelow
+let &splitright = s:save_splitright
+wincmd t
+let s:save_winminheight = &winminheight
+let s:save_winminwidth = &winminwidth
+set winminheight=0
+set winheight=1
+set winminwidth=0
+set winwidth=1
+exe 'vert 1resize ' . ((&columns * 31 + 88) / 176)
+exe 'vert 2resize ' . ((&columns * 144 + 88) / 176)
 argglobal
-balt jsconfig.json
+enew
+file NERD_tree_2
+balt public/vue-sample/src/components/HelloRemote.vue
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal nofen
+wincmd w
+argglobal
+balt public/vue-sample/src/components/HelloRemote.vue
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -38,12 +66,16 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 29 - ((28 * winheight(0) + 21) / 43)
+let s:l = 1 - ((0 * winheight(0) + 21) / 43)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 29
+keepjumps 1
 normal! 0
+wincmd w
+2wincmd w
+exe 'vert 1resize ' . ((&columns * 31 + 88) / 176)
+exe 'vert 2resize ' . ((&columns * 144 + 88) / 176)
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
@@ -51,12 +83,15 @@ endif
 unlet! s:wipebuf
 set winheight=1 winwidth=20
 let &shortmess = s:shortmess_save
+let &winminheight = s:save_winminheight
+let &winminwidth = s:save_winminwidth
 let s:sx = expand("<sfile>:p:r")."x.vim"
 if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
 set hlsearch
+nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :

@@ -70,9 +70,20 @@ nav .buttons {
 }
 nav .buttons button {
   line-height: 24px;
+  outline: none;
 }
 nav .buttons button + button {
   margin-left: 10px;
+}
+nav .buttons button.save {
+  background-color: var(--color-branding);
+  color: #fff;
+  border-color: var(--color-branding);
+  border-style: solid;
+  border-radius: 3px;
+}
+nav .buttons button.save:disabled {
+  display: none;
 }
 nav .path {
   line-height: var(--nav-height);

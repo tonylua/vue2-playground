@@ -9,6 +9,9 @@
       </h1>
       <span class="path">{{ currentPath }}</span>
       <div class="buttons">
+        <button class="save" @click="onSave" :disabled="!currentPath">
+          save
+        </button>
         <button @click="readRemoteSfc">read sfc</button>
         <button @click="loadRemoteComp">systemjs load</button>
       </div>
@@ -18,7 +21,7 @@
         <codemirror
           v-model="code"
           :options="cmOptions"
-          :mode="isSFCSource ? 'text/x-vue' : 'text/javascript'"
+          :mode="mode"
           @ready="onCmReady"
           @input="onCmChange"
         />
@@ -54,6 +57,11 @@ export default {
       isSFCSource: true,
       cmOptions: {},
     };
+  },
+  computed: {
+    mode() {
+      return this.isSFCSource ? "text/x-vue" : "text/javascript";
+    },
   },
   methods: {
     onCmReady(cm) {
@@ -92,6 +100,16 @@ export default {
       console.log(comp, "systemjs component loaded");
       this.code = code;
       // this.remote = comp.default;
+    },
+    onSave() {
+      let filename = this.currentPath.split("/");
+      filename = filename[filename.length - 1];
+      const a = document.createElement("a");
+      a.href = window.URL.createObjectURL(
+        new Blob([this.code], { type: this.mode })
+      );
+      a.download = filename;
+      a.click();
     },
   },
   mounted() {},
