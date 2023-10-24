@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueCodemirror from "vue-codemirror";
 import "codemirror/lib/codemirror.css";
 import "codemirror/mode/vue/vue.js";
-import "codemirror/theme/base16-dark.css";
+import "codemirror/theme/eclipse.css";
 import "codemirror/addon/selection/active-line.js";
 import "codemirror/addon/selection/mark-selection.js";
 import "codemirror/addon/search/searchcursor.js";
@@ -42,7 +42,7 @@ Vue.use(VueCodemirror, {
     line: true,
     keyMap: "sublime",
     mode: "text/x-vue",
-    theme: "base16-dark",
+    theme: "eclipse",
   },
 });
 

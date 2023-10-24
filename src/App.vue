@@ -1,16 +1,36 @@
 <template>
   <div id="app">
-    <button @click="readRemoteSfc">read sfc</button>
-    <button @click="loadRemoteComp">systemjs load</button>
+    <nav>
+      <h1>
+        <img
+          src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTYuMzIgMTcwLjAyIj4KICA8cGF0aCBmaWxsPSIjNDJiODgzIiBkPSJNMTIwLjgzIDBMOTguMTYgMzkuMjYgNzUuNDkgMEgwbDk4LjE2IDE3MC4wMkwxOTYuMzIgMGgtNzUuNDl6Ii8+CiAgPHBhdGggZmlsbD0iIzM1NDk1ZSIgZD0iTTEyMC44MyAwTDk4LjE2IDM5LjI2IDc1LjQ5IDBIMzkuMjZsNTguOSAxMDIuMDFMMTU3LjA2IDBoLTM2LjIzeiIvPgo8L3N2Zz4K"
+        />
+        Vue 2 Component Playground
+      </h1>
+      <span class="path">{{ currentPath }}</span>
+      <div class="buttons">
+        <button @click="readRemoteSfc">read sfc</button>
+        <button @click="loadRemoteComp">systemjs load</button>
+      </div>
+    </nav>
     <div class="code-box">
-      <codemirror
-        v-model="code"
-        :options="cmOptions"
-        :mode="isSFCSource ? 'text/x-vue' : 'text/javascript'"
-        @ready="onCmReady"
-        @input="onCmChange"
-      />
-      <component :is="remote" v-if="remote" v-bind="$attrs" v-on="$listeners" />
+      <div class="left">
+        <codemirror
+          v-model="code"
+          :options="cmOptions"
+          :mode="isSFCSource ? 'text/x-vue' : 'text/javascript'"
+          @ready="onCmReady"
+          @input="onCmChange"
+        />
+      </div>
+      <div class="right">
+        <component
+          :is="remote"
+          v-if="remote"
+          v-bind="$attrs"
+          v-on="$listeners"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -29,6 +49,7 @@ export default {
   data() {
     return {
       remote: null,
+      currentPath: "",
       code: ``,
       isSFCSource: true,
       cmOptions: {},
@@ -36,25 +57,23 @@ export default {
   },
   methods: {
     onCmReady(cm) {
-      cm.setSize(600, 360);
+      cm.setSize("100%", "100%");
     },
     async onCmChange(v) {
-      let comp = null;
-      if (this.isSFCSource) {
-        comp = await sfc2Component(v);
-        console.log("sfc to component");
-        this.remote = comp;
-        return;
-      }
-      console.log("module to component");
-      this.remote = await module2Component(v);
+      this.remote = this.isSFCSource
+        ? await sfc2Component(v)
+        : await module2Component(v);
     },
     async readRemoteSfc() {
       this.code = "";
       this.isSFCSource = false;
-      const [code, comp] = await loadSfc(
+      const sfcPath = prompt(
+        "请输入SFC文件路径",
         "/vue-sample/src/components/HelloRemote.vue"
       );
+      if (!sfcPath?.trim()) return;
+      this.currentPath = sfcPath;
+      const [code, comp] = await loadSfc(sfcPath);
       console.log(comp, "remote sfc loaded");
       this.isSFCSource = true;
       this.code = code;
@@ -63,9 +82,13 @@ export default {
     async loadRemoteComp() {
       this.code = "";
       this.isSFCSource = false;
-      const [code, comp] = await loadComponent(
-        "http://localhost:8080/vue-sample/dist/comp.umd.min.js"
+      const modPath = prompt(
+        "请输入模块文件路径",
+        "/vue-sample/dist/comp.umd.min.js"
       );
+      if (!modPath?.trim()) return;
+      this.currentPath = modPath;
+      const [code, comp] = await loadComponent(modPath);
       console.log(comp, "systemjs component loaded");
       this.code = code;
       // this.remote = comp.default;
@@ -75,22 +98,6 @@ export default {
 };
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: left;
-  color: #2c3e50;
-  margin-top: 20px;
-}
-.code-box {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-}
-button + button {
-  margin-left: 10px;
-}
+<style scoped>
+@import "./app.css";
 </style>
