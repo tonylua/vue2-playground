@@ -2,11 +2,11 @@
 node_modules
 /dist
 .session.vim
+public/vue-sample/.session.vim
 
 # local env files
 .env.local
 .env.*.local
-.session.vim
 
 # Log files
 npm-debug.log*
