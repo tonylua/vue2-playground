@@ -39,15 +39,13 @@
 </template>
 
 <script>
-import { saveAs } from "file-saver";
-import html2canvas from "html2canvas";
-import { removeBlankArea } from "./utils/canvas";
 import {
   sfc2Component,
   module2Component,
   loadSfc,
   loadComponent,
 } from "./utils/sfc";
+import { shot } from "./utils/canvas";
 
 export default {
   name: "App",
@@ -104,13 +102,8 @@ export default {
       this.code = code;
       // this.remote = comp.default;
     },
-    async onShot() {
-      const saveName = prompt("请输入截图文件名称", "screenshot.png");
-      if (!saveName?.trim()) return;
-      const comp = this.$refs.comp.$el;
-      let canvas = await html2canvas(comp);
-      canvas = removeBlankArea(canvas);
-      canvas.toBlob((blob) => saveAs(blob, saveName));
+    onShot() {
+      shot(this.$refs.comp.$el, "screenshot.png");
     },
     onSave() {
       let filename = this.currentPath.split("/");

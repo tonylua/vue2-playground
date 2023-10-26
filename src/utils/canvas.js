@@ -1,3 +1,6 @@
+import { saveAs } from "file-saver";
+import html2canvas from "html2canvas";
+
 const isWhite = (rgb) => {
   // many images contain noise, as the white is not a pure #fff white
   return rgb.red > 200 && rgb.green > 200 && rgb.blue > 200;
@@ -9,7 +12,7 @@ function Point(x, y) {
 }
 
 // https://stackoverflow.com/questions/69440668/crop-images-according-to-the-white-spaces-in-javascript
-export function removeBlankArea(canvas, options) {
+function removeBlankArea(canvas, options) {
   options = {
     offsetX: 20,
     offsetY: 20,
@@ -89,3 +92,11 @@ export function removeBlankArea(canvas, options) {
   tCtx.drawImage(canvas, cropTop, cropLeft);
   return tempCanvas;
 }
+
+export const shot = async (targetDom, defaultSaveName) => {
+  const saveName = prompt("请输入截图文件名称", defaultSaveName);
+  if (!saveName?.trim()) return;
+  let canvas = await html2canvas(targetDom);
+  canvas = removeBlankArea(canvas);
+  canvas.toBlob((blob) => saveAs(blob, saveName));
+};
