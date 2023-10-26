@@ -9,9 +9,8 @@
       </h1>
       <span class="path">{{ currentPath }}</span>
       <div class="buttons">
-        <button class="save" @click="onSave" :disabled="!currentPath">
-          save
-        </button>
+        <button @click="onShot" v-if="currentPath">📷 screenshot</button>
+        <button class="save" @click="onSave" v-if="currentPath">💾 save</button>
         <button @click="readRemoteSfc">read sfc</button>
         <button @click="loadRemoteComp">systemjs load</button>
       </div>
@@ -28,6 +27,7 @@
       </div>
       <div class="right">
         <component
+          ref="comp"
           :is="remote"
           v-if="remote"
           v-bind="$attrs"
@@ -39,12 +39,15 @@
 </template>
 
 <script>
+import { saveAs } from "file-saver";
+import html2canvas from "html2canvas";
+import { removeBlankArea } from "./utils/canvas";
 import {
   sfc2Component,
   module2Component,
   loadSfc,
   loadComponent,
-} from "./sfc-utils";
+} from "./utils/sfc";
 
 export default {
   name: "App",
@@ -100,6 +103,14 @@ export default {
       console.log(comp, "systemjs component loaded");
       this.code = code;
       // this.remote = comp.default;
+    },
+    async onShot() {
+      const saveName = prompt("请输入截图文件名称", "screenshot.png");
+      if (!saveName?.trim()) return;
+      const comp = this.$refs.comp.$el;
+      let canvas = await html2canvas(comp);
+      canvas = removeBlankArea(canvas);
+      canvas.toBlob((blob) => saveAs(blob, saveName));
     },
     onSave() {
       let filename = this.currentPath.split("/");

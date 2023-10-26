@@ -82,9 +82,6 @@ nav .buttons button.save {
   border-style: solid;
   border-radius: 3px;
 }
-nav .buttons button.save:disabled {
-  display: none;
-}
 nav .path {
   line-height: var(--nav-height);
   white-space: nowrap;
