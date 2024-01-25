@@ -1,24 +1,16 @@
 {
-  "name": "vue-source-editor-sample",
+  "name": "root",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
-  },
-  "dependencies": {
-    "codemirror": "^5.41.0",
-    "core-js": "^3.6.5",
-    "file-saver": "^2.0.5",
-    "html2canvas": "^1.4.1",
-    "systemjs": "^6.14.2",
-    "vue": "^2.6.11",
-    "vue-codemirror": "^4.0.0",
-    "vue3-sfc-loader": "^0.8.4"
+    "dev": "lerna run dev",
+    "build": "lerna run build",
+    "postinstall": "concurrently \"cd packages/main-project && pnpm i\" \"cd packages/vue-sample && pnpm i\""
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.8",
-    "@vue/cli-service": "~4.5.8",
-    "glob": "^10.3.10",
-    "vue-template-compiler": "^2.6.11"
+    "concurrently": "^8.2.2",
+    "lerna": "^7.2.0"
   }
 }

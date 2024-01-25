@@ -1,0 +1,25 @@
+{
+  "name": "playground-project_vue-source-editor",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "codemirror": "^5.41.0",
+    "core-js": "^3.6.5",
+    "file-saver": "^2.0.5",
+    "html2canvas": "^1.4.1",
+    "systemjs": "^6.14.2",
+    "vue": "^2.6.11",
+    "vue-codemirror": "^4.0.0",
+    "vue3-sfc-loader": "^0.8.4"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.8",
+    "@vue/cli-service": "~4.5.8",
+    "glob": "^10.3.10",
+    "vue-template-compiler": "^2.6.11"
+  }
+}

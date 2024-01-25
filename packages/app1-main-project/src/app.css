@@ -1,0 +1,107 @@
+:root {
+  --full-height: 100%;
+  --base: #444;
+  --nav-height: 60px;
+  --bg: #fff;
+  --bg-soft: #f8f8f8;
+  --border: #ddd;
+  --text-light: #888;
+  --font-code: Menlo, Monaco, Consolas, "Courier New", monospace;
+  --color-branding: #42b883;
+  --color-branding-dark: #416f9c;
+  --header-height: 38px;
+  --bg-light: #fff;
+  --btn: #666;
+  --highlight: #333;
+  --green: #3ca877;
+  --purple: #904cbc;
+  --btn-bg: #eee;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: left;
+  color: #2c3e50;
+}
+
+html,
+body,
+#app,
+#app .code-box > div,
+.vue-codemirror {
+  height: var(--full-height);
+}
+#app .code-box {
+  height: calc(var(--full-height) - var(--nav-height));
+}
+
+nav {
+  color: var(--base);
+  height: var(--nav-height);
+  box-sizing: border-box;
+  padding: 0 1em;
+  background-color: var(--bg);
+  box-shadow: 0 0 4px #00000054;
+  position: relative;
+  z-index: 999;
+  display: flex;
+  justify-content: space-between;
+}
+
+nav h1 {
+  font-weight: 500;
+  display: inline-flex;
+  place-items: center;
+}
+
+nav h1 img {
+  height: 24px;
+  margin-right: 10px;
+}
+
+nav .buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+nav .buttons button {
+  line-height: 24px;
+  outline: none;
+}
+nav .buttons button + button {
+  margin-left: 10px;
+}
+nav .buttons button.save {
+  background-color: var(--color-branding);
+  color: #fff;
+  border-color: var(--color-branding);
+  border-style: solid;
+  border-radius: 3px;
+}
+nav .path {
+  line-height: var(--nav-height);
+  white-space: nowrap;
+  flex: 1;
+  padding: 0 10px;
+  font-size: 16px;
+  color: var(--color-branding);
+  font-family: var(--font-code);
+}
+
+.code-box {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  position: relative;
+}
+.code-box .left {
+  width: 50%;
+  border-right: 1px solid var(--border);
+}
+.code-box .right {
+  width: 50%;
+}
